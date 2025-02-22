@@ -1,25 +1,24 @@
 package main
 
 import (
+	"log"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/seccret404/simple-crud-golang/config"
+	"github.com/seccret404/simple-crud-golang/routes"
 )
 
 func main() {
-	db	:= config.ConnectDB()
-	defer config.CLoseDB()
-
 	//fiber inisialisasi
-	app := fiber.New();
+	app := fiber.New()
 
-	app.Get("/", func(c *fiber.Ctx) error{
-		err := db.Ping()
-		if err != nil{
-			return c.Status(500).JSON(fiber.Map{"status": "error", "message": "Database tidak terhubung"})
-		}
-		return c.JSON(fiber.Map{"status": "success", "message": "Database terhubung"})
-	})
+	config.ConnectDB()
+	routes.CreateRoutes(app)
 
-	app.Listen(":3000");
+	//set port
+	port := ":3000"
 	
+	log.Println("Server running on port " + port)
+	log.Fatal(app.Listen(port))
+
 }
