@@ -45,7 +45,7 @@ func CreateMenuHandler(c *fiber.Ctx) error{
 		if err != nil{
 			return c.Status(400).JSON(fiber.Map{"error" : "Gagal convert ke int"})
 		}
-		
+
 		req.StockProduct = int64(stock) //final value
 
 	result, err := queries.CreateMenu(c.Context(), models.CreateMenuParams{
@@ -118,6 +118,20 @@ func UpdateByIDHandler(c *fiber.Ctx) error{
 	if err := c.BodyParser(&req); err != nil{
 		return c.Status(400).JSON(fiber.Map{"error" : "Invalid Request"})
 	}
+
+	imageUrl, err := UploadImageHandler(c)
+	if err != nil{
+		return c.Status(400).JSON(fiber.Map{"error" : "Gagal nyimpan"})
+	}
+
+	req.ImageProduct = imageUrl
+	req.Name = c.FormValue("name_product")
+	req.Description = c.FormValue("description_product")
+
+	StockProduct := c.FormValue("stock_product")
+	stock, err := strconv.Atoi(StockProduct)
+
+	req.StockProduct = int64(stock)
 
 	err = queries.UpdateMenu(c.Context(), models.UpdateMenuParams{
 		NameProduct: req.Name,
