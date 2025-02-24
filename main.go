@@ -11,6 +11,8 @@ import (
 func main() {
 	//fiber inisialisasi
 	app := fiber.New()
+	
+	app.Static("/uploads", "./uploads")
 
 	config.ConnectDB()
 	routes.CreateRoutes(app)

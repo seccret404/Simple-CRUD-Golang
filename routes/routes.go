@@ -8,10 +8,15 @@ import (
 func CreateRoutes(app *fiber.App){
 	api := app.Group("/api")
 	
+	//menu endpoint
 	api.Post("/menu", handlers.CreateMenuHandler)
 	api.Get("menu/:id", handlers.GetByIDHandler)
 	api.Get("/menu", handlers.GetListMenuHandler)
 	api.Put("/menu/:id", handlers.UpdateByIDHandler)
 	api.Delete("/menu/:id", handlers.DeleteMenuHandler)
+
+	//file endpoint
+
+	api.Post("/uploads", handlers.UploadImageHandler)
 
 }
