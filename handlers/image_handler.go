@@ -11,12 +11,12 @@ import (
 
 const URL = "http://localhost:3000"
 
-func UploadImageHandler(c *fiber.Ctx) error{
+func UploadImageHandler(c *fiber.Ctx) (string, error){
 	//mengambil field img adri form
 
-	file, err := c.FormFile("image")
+	file, err := c.FormFile("image_product")
 	if err != nil{
-		return c.Status(400).JSON(fiber.Map{"error" : "Gagal dalam mengambil file"})
+		return "", err //can replace witj json response
 	}
 
 	//check folder uploads
@@ -31,7 +31,7 @@ func UploadImageHandler(c *fiber.Ctx) error{
 	
 	//sv file to folder 
 	if err := c.SaveFile(file, filePath); err != nil{
-		return c.Status(500).JSON(fiber.Map{"error" : "Gagal menyimpan file"})
+		return  "", err //can replace witj json response
 	}
 
 	//url untuk akses gambar
@@ -39,6 +39,6 @@ func UploadImageHandler(c *fiber.Ctx) error{
 
 	log.Println("File berhasil di upload : ", imgUrl)
 
-	return c.JSON(fiber.Map{"message" : "Upload Berhasil ", "Image url : " : imgUrl})
+	return  imgUrl,nil //can replace witj json response
 
 }	

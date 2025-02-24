@@ -17,6 +17,7 @@ func CreateRoutes(app *fiber.App){
 
 	//file endpoint
 
-	api.Post("/uploads", handlers.UploadImageHandler)
+	// api.Post("/uploads", handlers.UploadImageHandler) to test img
+
 
 }

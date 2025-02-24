@@ -23,15 +23,36 @@ func CreateMenuHandler(c *fiber.Ctx) error{
 	queries := models.New(db)
 
 	var req CreateMenuRequest
+
+	 
 	if err := c.BodyParser(&req); err != nil{
 		return c.Status(400).JSON(fiber.Map{"error" : "Invalid Request"})
 	}
+
+	//call function handler upload
+		imageUrl, err := UploadImageHandler(c)
+		if err != nil{
+			return c.Status(400).JSON(fiber.Map{"error" : "Gagal menyimpan gambar", "detail": err.Error()})
+		}
+		//if we test frorm form-data
+		req.ImageProduct = imageUrl
+		req.Name = c.FormValue("name_product")
+		req.Description = c.FormValue("description_product")
+
+		//set type data string to int
+		StockProduct := c.FormValue("stock_product")
+		stock, err := strconv.Atoi(StockProduct)
+		if err != nil{
+			return c.Status(400).JSON(fiber.Map{"error" : "Gagal convert ke int"})
+		}
+		
+		req.StockProduct = int64(stock) //final value
 
 	result, err := queries.CreateMenu(c.Context(), models.CreateMenuParams{
 		NameProduct: req.Name,
 		Price: req.Price,
 		DescriptionProduct: req.Description,
-		ImageProduct: req.ImageProduct,
+		ImageProduct: imageUrl,
 		StockProduct: int32(req.StockProduct),
 	})
 
