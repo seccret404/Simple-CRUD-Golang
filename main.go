@@ -11,8 +11,12 @@ import (
 func main() {
 	//fiber inisialisasi
 	app := fiber.New()
+	config.LoadEnv()
 	
 	app.Static("/uploads", "./uploads")
+
+	// secretkey := config.GetEnv("JWT_KEY_SECRET","default_value")
+	// log.Println("The Key :", secretkey)
 
 	config.ConnectDB()
 	routes.CreateRoutes(app)
