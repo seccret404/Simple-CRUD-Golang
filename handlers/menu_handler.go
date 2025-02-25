@@ -130,6 +130,9 @@ func UpdateByIDHandler(c *fiber.Ctx) error{
 
 	StockProduct := c.FormValue("stock_product")
 	stock, err := strconv.Atoi(StockProduct)
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{"error" : "error nih, gagal convert","detail" : err.Error()})
+	}
 
 	req.StockProduct = int64(stock)
 
