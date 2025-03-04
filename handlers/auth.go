@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"database/sql"
+	"log"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -42,6 +43,7 @@ func (h *AuthHandler) RegisterUser(c *fiber.Ctx) error {
 		Password: string(hashedPassword),
 	})
 	if err != nil {
+		log.Println(err)
 		return c.Status(500).JSON(fiber.Map{"error": "Failed to create user"})
 	}
 
